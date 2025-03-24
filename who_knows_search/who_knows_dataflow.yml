@@ -1,18 +1,18 @@
 nodes:
-  - id: terminal-input
-    build: pip install -e node-hub/terminal-input
+  - id: serve
+    build: pip install -e ../node_hub/serve
     path: dynamic
     outputs:
       - data
     inputs:
-      agent_response: hello-world-agent/hello_world_result
-  - id: data-search-agent
-    build: pip install -e node-hub/hello-world
-    path: hello-world
+      agent_response: github_search_LLM/github_search_LLM_result
+  - id: github_search_LLM
+    build: pip install -e ../node_hub/github_search_LLM
+    path: github_search_LLM
     outputs:
-      - hello_world_result
+      - github_search_LLM_result
     inputs:
-      query: terminal-input/data
+      query: serve/data
     env:
       IS_DATAFLOW_END: true
       WRITE_LOG: true
