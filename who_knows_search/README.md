@@ -1,4 +1,4 @@
-# **Hello World 示例项目**
+# **who_knows_search**
 
 ## **项目概述**
 Hello World 是 MoFa 框架中最基础的智能体示例，展示了如何构建、配置和运行一个简单的智能体。它实现了最基本的输入输出模式，是学习 MoFa 框架的最佳起点。
@@ -6,9 +6,9 @@ Hello World 是 MoFa 框架中最基础的智能体示例，展示了如何构�
 ## **团队信息**
 - **团队名称**: who_knows团队
 - **项目成员**:
-  - 胡宇桥 (GitCode用户名: whatiname)
-  - 杨淏森 (GitCode用户名: wrfdafaf)
-- **项目地址**: [GitCode Repo](https://gitcode.com/moxin-org/mofa/overview)
+  - 胡宇桥 (GitHub用户名: whatiname)
+  - 杨淏森 (GitHub用户名: wrfdafaf)
+- **项目地址**: [GitHub Repo](https://github.com/whatiname888/who_knows.git)
 
 ## **核心功能**
 - 基础智能体架构
@@ -50,14 +50,14 @@ terminal-input
 ```yaml
 nodes:
   - id: terminal-input
-    build: pip install -e ../../node-hub/terminal-input
+    build: pip install -e node-hub/terminal-input
     path: dynamic
     outputs:
       - data
     inputs:
       agent_response: hello-world-agent/hello_world_result
-  - id: hello-world-agent
-    build: pip install -e ../../agent-hub/hello-world
+  - id: data-search-agent
+    build: pip install -e node-hub/hello-world
     path: hello-world
     outputs:
       - hello_world_result
@@ -134,11 +134,5 @@ if __name__ == "__main__":
 - `log_hello-world-agent.txt`: 智能体运行日志
 - `dora-coordinator.txt`: 协调器日志
 - `dora-daemon.txt`: 守护进程日志
-
-## **最佳实践**
-1. 使用 `agent.logger` 记录关键操作
-2. 在 `try-except` 中处理所有业务逻辑
-3. 保持输入输出参数类型一致
-4. 使用环境变量控制调试模式
 
 
