@@ -1,0 +1,3 @@
+[submodule "mofa"]
+	path = mofa
+	url = https://github.com/moxin-org/mofa.git
