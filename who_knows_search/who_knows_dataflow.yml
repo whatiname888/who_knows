@@ -5,7 +5,10 @@ nodes:
     outputs:
       - data
     inputs:
-      agent_response: github_search_LLM/github_search_LLM_result
+      agent_response_github: github_search_LLM/github_search_LLM_result
+      agent_response_arxvi: arxvi_search_LLM/arxvi_search_LLM_result
+      agent_response_google: google_search_LLM/google_search_LLM_result
+
   - id: github_search_LLM
     build: pip install -e ../node_hub/github_search_LLM
     path: github_search_LLM
@@ -13,6 +16,27 @@ nodes:
       - github_search_LLM_result
     inputs:
       query: serve/data
+
+  - id: arxvi_search_LLM
+    build: pip install -e ../node_hub/arxvi_search_LLM
+    path: arxvi_search_LLM
+    outputs:
+      - arxvi_search_LLM_result
+    inputs:
+      query: serve/data
+
+  - id: google_search_LLM
+    build: pip install -e ../node_hub/google_search_LLM
+    path: google_search_LLM
+    outputs:
+      - google_search_LLM_result
+    inputs:
+      query: serve/data
+
+
+
+
+
     env:
       IS_DATAFLOW_END: true
       WRITE_LOG: true

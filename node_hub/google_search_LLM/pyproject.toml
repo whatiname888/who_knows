@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "google_search_LLM"
+version = "0.0.1"
+authors = [
+    "whatiname888 <15201090624@163.com>"
+]
+description = "google_search_LLM"
+license = "Apache License"
+homepage = "https://github.com/whatiname888/who_knows"
+documentation = "https://github.com/whatiname888/who_knows/blob/main/README.md"
+readme = "README.md"
+packages = [{ include = "google_search_LLM" }]
+
+[tool.poetry.dependencies]
+pyarrow = ">= 5.0.0"
+
+[tool.poetry.scripts]
+google_search_LLM = "google_search_LLM.main:main"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
+
+
