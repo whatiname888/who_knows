@@ -20,8 +20,14 @@ def send_task_and_receive_data(node):
         data = input(
             " Send You Task :  ",
         )
+        
+            
         node.send_output("data", pa.array([clean_string(data)]))
         event = node.next(timeout=200)
+        while True:
+            node_results = json.loads(event['value'].to_pylist()[0])
+            print(node_results)
+            event = node.next(timeout=200)
         if event is not None:
             while True:
                 if event is not None:
