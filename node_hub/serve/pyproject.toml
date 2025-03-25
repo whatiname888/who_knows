@@ -2,8 +2,7 @@
 name = "serve"
 version = "0.0.1"
 authors = [
-    "whatiname888 <15201090624@163.com>",
-    "HaoSen Yang <@enzo-le-van.fr>"
+    "whatiname888 <15201090624@163.com>"
 ]
 description = "who_knows_serve"
 license = "Apache License"
