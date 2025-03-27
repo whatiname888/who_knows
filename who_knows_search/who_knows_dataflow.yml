@@ -9,6 +9,16 @@ nodes:
       agent_response_arxiv: arxiv_search_LLM/arxiv_search_LLM_result
       agent_response_google: google_search_LLM/google_search_LLM_result
 
+  - id: terminal-input
+    build: pip install -e ../node_hub/terminal-input
+    path: dynamic
+    outputs:
+      - data
+    inputs:
+      agent_response_github: github_search_LLM/github_search_LLM_result
+      agent_response_arxiv: arxiv_search_LLM/arxiv_search_LLM_result
+      agent_response_google: google_search_LLM/google_search_LLM_result
+
   
 
   - id: arxiv_search_LLM
@@ -17,7 +27,7 @@ nodes:
     outputs:
       - arxiv_search_LLM_result
     inputs:
-      query: serve/data
+      query: terminal-input/data
     
   - id: github_search_LLM
     build: pip install -e ../node_hub/github_search_LLM
@@ -25,7 +35,7 @@ nodes:
     outputs:
       - github_search_LLM_result
     inputs:
-      query: serve/data
+      query: terminal-input/data
   
   - id: google_search_LLM
     build: pip install -e ../node_hub/google_search_LLM
@@ -33,7 +43,7 @@ nodes:
     outputs:
       - google_search_LLM_result
     inputs:
-      query: serve/data
+      query: terminal-input/data
 
   
 

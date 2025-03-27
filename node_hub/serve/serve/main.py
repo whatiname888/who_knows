@@ -20,6 +20,7 @@ import uuid
 import json
 
 app = Flask(__name__)
+node = Node("serve")
 
 # 线程安全的消息队列和聊天记录
 message_queues = defaultdict(queue.Queue)
@@ -76,20 +77,32 @@ chat_agent = ChatAgent()
 
 def monitor_external_changes(session_id, stop_event):
     """监控外部变化并决定是否发送消息"""
+    
     while not stop_event.is_set() and session_id in active_sessions:
         try:
             # 模拟从外部获取消息 (实际应用中可以是API调用、数据库查询等)
-            time.sleep(random.uniform(5, 15))  # 随机间隔检查
-            external_msg = random.choice(external_messages)
-            
+            #time.sleep(random.uniform(5, 15))  # 随机间隔检查
+            #external_msg = random.choice(external_messages)
             with system_lock:
-                history = chat_histories[session_id]
+                    history = chat_histories[session_id]
+            
+            event = node.next(timeout=200)
+            print(f"监控线程接收到外部消息: {event}")
+
+            if event is not None:
+                print(f"监控线程接收到外部消息: {event}")
+                node_results = json.loads(event['value'].to_pylist()[0])
+                results = node_results.get('node_results')
+                is_dataflow_end = node_results.get('dataflow_status', False)
+                step_name = node_results.get('step_name', '')
+                external_msg = f'-------------{step_name}---------------\n{results}\n---------------------------------------'
+                if is_dataflow_end ==True or is_dataflow_end == 'true' or is_dataflow_end == 'True':
+                        break
+                event = node.next(timeout=200)
+                
                 
                 # 根据聊天历史决定是否发送
-                if len(history) > 0 and not any(
-                    msg['sender'] == 'system' and msg['message'] == external_msg 
-                    for msg in history[-3:]
-                ):
+                if len(history) > 0 :
                     message_queues[session_id].put(json.dumps({
                         'message': external_msg,
                         'sender': 'system'
@@ -99,6 +112,7 @@ def monitor_external_changes(session_id, stop_event):
                         'message': external_msg,
                         'time': time.time()
                     })
+            
                     
         except Exception as e:
             print(f"监控线程错误: {e}")
@@ -157,6 +171,8 @@ def send_message():
     if session_id not in active_sessions:
         return jsonify({"error": "无效会话"}), 400
     
+
+    
     # 添加到聊天历史
     with system_lock:
         chat_histories[session_id].append({
@@ -164,6 +180,9 @@ def send_message():
             'message': message,
             'time': time.time()
         })
+        node.send_output("data", pa.array([clean_string(message)]))
+    
+    print(f"发送消息: {message}")
     
     # 显示用户消息
     # message_queues[session_id].put(json.dumps({
@@ -240,9 +259,9 @@ def main():
 
     data = os.getenv("DATA", args.data)
 
-    node = Node(
-        args.name
-    )  # provide the name to connect to the dataflow if dynamic node
+    #node = Node(
+    #    args.name
+    #)  # provide the name to connect to the dataflow if dynamic node
 
     if data is None and os.getenv("DORA_NODE_CONFIG") is None:
         app.run(debug=False, threaded=True)
