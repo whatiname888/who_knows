@@ -27,7 +27,7 @@ nodes:
     outputs:
       - arxiv_search_LLM_result
     inputs:
-      query: terminal-input/data
+      query: serve/data
     
   - id: github_search_LLM
     build: pip install -e ../node_hub/github_search_LLM
@@ -35,7 +35,7 @@ nodes:
     outputs:
       - github_search_LLM_result
     inputs:
-      query: terminal-input/data
+      query: serve/data
   
   - id: google_search_LLM
     build: pip install -e ../node_hub/google_search_LLM
@@ -43,7 +43,7 @@ nodes:
     outputs:
       - google_search_LLM_result
     inputs:
-      query: terminal-input/data
+      query: serve/data
 
   
 

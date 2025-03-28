@@ -15,6 +15,7 @@ RUNNER_CI = True if os.getenv("CI") == "true" else False
 
 def clean_string(input_string:str):
     return input_string.encode('utf-8', 'replace').decode('utf-8')
+
 def send_task_and_receive_data(node):
     while True:
         data = input(
@@ -22,7 +23,7 @@ def send_task_and_receive_data(node):
         node.send_output("data", pa.array([clean_string(data)]))
         print("Waiting for response...")
         event = node.next(timeout=200)
-        print("注意到")
+        print("注意到？？？？")
         if event is not None:
             while True:
                 print(event)

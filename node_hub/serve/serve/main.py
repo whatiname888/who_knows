@@ -3,7 +3,7 @@ import json
 import os
 import ast
 import sys
-
+from queue import Queue
 import click
 import pyarrow as pa
 from dora import Node
@@ -19,17 +19,41 @@ from collections import defaultdict
 import uuid
 import json
 
+#import threading
+
+
+
+
+
+
+
+
+
+
+
+
+node=Node("serve")
+
 app = Flask(__name__)
-node = Node("serve")
+#node_shou = Node("serve")
+#node_fa = Node("serve")
+
 
 # 线程安全的消息队列和聊天记录
 message_queues = defaultdict(queue.Queue)
 chat_histories = defaultdict(list)
 system_lock = Lock()
+dora_lock = Lock()
 
 # 活动会话管理
 active_sessions = set()
 monitor_threads = {}
+
+# 创建双工通信队列
+send_queue = Queue()
+receive_queue = Queue()
+stop_flag = False
+
 
 # 外部消息模拟
 external_messages = [
@@ -39,6 +63,35 @@ external_messages = [
     "更新: 你的请求已被处理",
     "提示: 试试问关于天气的问题"
 ]
+
+
+def dora_worker():
+    global stop_flag
+    while not stop_flag:
+        try:
+            # 处理发送任务
+            if not send_queue.empty():
+                message = send_queue.get(timeout=0.1)
+                print(f"Dora worker received message: {message}")
+                with dora_lock:  # 仍建议保留锁机制
+                    node.send_output("data", pa.array([clean_string(message)]))
+                send_queue.task_done()
+            
+            # 处理接收事件
+            with dora_lock:
+                event = node.next(timeout=0.1)  # 适当调整超时时间
+                
+            if event is None:
+                continue
+            if event['type'] == 'ERROR':
+                continue
+            receive_queue.put(event)
+            print(f"Dora worker received event: {event}")
+                
+                
+        except Exception as e:
+            print(f"Dora worker error: {str(e)}")
+
 
 class ChatAgent:
     def __init__(self):
@@ -77,7 +130,6 @@ chat_agent = ChatAgent()
 
 def monitor_external_changes(session_id, stop_event):
     """监控外部变化并决定是否发送消息"""
-    
     while not stop_event.is_set() and session_id in active_sessions:
         try:
             # 模拟从外部获取消息 (实际应用中可以是API调用、数据库查询等)
@@ -85,20 +137,36 @@ def monitor_external_changes(session_id, stop_event):
             #external_msg = random.choice(external_messages)
             with system_lock:
                     history = chat_histories[session_id]
+                    #event = node.next(timeout=200)
             
-            event = node.next(timeout=200)
-            print(f"监控线程接收到外部消息: {event}")
-
-            if event is not None:
+            # for event in node:
+            #     print(event)
+            #     if event["type"] == "INPUT":
+            #         message = event["value"][0].as_py()
+            #         print(f"""I heard {message} from {event["id"]}""")
+            #print(f"监控线程接收到外部消息: {event}")
+            #print(node_shou)
+            #print(f"监控线程接收到外部消息: {event}")
+            #print("在收消息")
+            #with dora_lock:
+                #print("在锁里面")
+                #event = node.next(timeout=0.010)
+            #if not event['type']=='ERROR':
+                # print("在收消息，有啦哈哈")
+                # print(event)
+            #print(event)
+            event=receive_queue.get(timeout=0.010)
+            event=None
+            if event is not None and event['type'] == "OUTPUT":
                 print(f"监控线程接收到外部消息: {event}")
                 node_results = json.loads(event['value'].to_pylist()[0])
                 results = node_results.get('node_results')
                 is_dataflow_end = node_results.get('dataflow_status', False)
                 step_name = node_results.get('step_name', '')
                 external_msg = f'-------------{step_name}---------------\n{results}\n---------------------------------------'
-                if is_dataflow_end ==True or is_dataflow_end == 'true' or is_dataflow_end == 'True':
-                        break
-                event = node.next(timeout=200)
+                #if is_dataflow_end ==True or is_dataflow_end == 'true' or is_dataflow_end == 'True':
+                #        break
+                
                 
                 
                 # 根据聊天历史决定是否发送
@@ -146,7 +214,8 @@ def start_session():
     # 启动监控线程
     stop_event = Event()
     monitor_threads[session_id] = stop_event
-    Thread(target=monitor_external_changes, args=(session_id, stop_event)).start()
+    #Thread(target=monitor_external_changes, args=(session_id, stop_event)).start()
+    #print("真的启动了起来了吗？")
     
     # 发送欢迎消息
     welcome_msg = {
@@ -180,9 +249,24 @@ def send_message():
             'message': message,
             'time': time.time()
         })
-        node.send_output("data", pa.array([clean_string(message)]))
     
-    print(f"发送消息: {message}")
+
+    clean_message = clean_string(message)
+    print(f"11发送消息: {clean_message}")
+
+    send_queue.put(clean_message)
+
+    # with dora_lock:
+    #     print("在锁里面（接收）")
+        
+        #node_shou.send_output("data", pa.array([clean_string(message)]),{})
+    
+
+    #     print(f"发送消息: {message}")
+    #node.send_output("data", pa.array([clean_string(message)]))
+    #print(f"发送消息: {message}")
+    
+    #print(f"发送消息: {message}")
     
     # 显示用户消息
     # message_queues[session_id].put(json.dumps({
@@ -194,7 +278,6 @@ def send_message():
     def generate_response():
         history = chat_histories.get(session_id, [])
         context = [msg['message'] for msg in history[-3:] if msg['sender'] == 'user']
-        
         response, new_context = chat_agent.generate_response(message, context)
         
         # 发送响应
@@ -227,14 +310,42 @@ def end_session(session_id):
     return jsonify({"status": "会话结束"})
 
 
-    
-
-
-
 
 
 def clean_string(input_string:str):
     return input_string.encode('utf-8', 'replace').decode('utf-8')
+
+
+def send_task_and_receive_data():
+    while True:
+        data = input(
+            " Send You Task :  ")
+        with dora_lock:
+            print("在锁里面（发送）")
+            #node_fa.send_output("data", pa.array([clean_string(message)]),{})
+            node.send_output("data", pa.array([clean_string(data)]))
+        #node.send_output("data", pa.array([clean_string(data)]))
+        print("Waiting for response...")
+        event = node.next(timeout=200)
+        print("注意到")
+        if event is not None:
+            while True:
+                print(event)
+                if event is not None:
+                    node_results = json.loads(event['value'].to_pylist()[0])
+                    results = node_results.get('node_results')
+                    is_dataflow_end = node_results.get('dataflow_status', False)
+                    step_name = node_results.get('step_name', '')
+                    click.echo(f'-------------{step_name}---------------')
+                    click.echo(f"{results} ", )
+                    click.echo(f'---------------------------------------')
+                    sys.stdout.flush()
+                    if is_dataflow_end ==True or is_dataflow_end == 'true' or is_dataflow_end == 'True':
+                        break
+                    event = node.next(timeout=200)
+
+
+
 def main():
 
     # Handle dynamic nodes, ask for the name of the node in the dataflow, and the same values as the ENV variables.
@@ -259,13 +370,23 @@ def main():
 
     data = os.getenv("DATA", args.data)
 
-    #node = Node(
-    #    args.name
-    #)  # provide the name to connect to the dataflow if dynamic node
+    
+    # node = Node(
+    #     args.name
+    # )  # provide the name to connect to the dataflow if dynamic node
+    
 
     if data is None and os.getenv("DORA_NODE_CONFIG") is None:
-        app.run(debug=False, threaded=True)
-        #send_task_and_receive_data(node)
+        dora_thread = Thread(target=dora_worker, daemon=True)
+        dora_thread.start()
+        app.run(debug=True, threaded=True)
+        dora_thread.join()
+        #send_task_and_receive_data(node)会
+        #tak=Thread(target=send_task_and_receive_data, daemon=True)
+        #tak.start()
+        #tak.join()  # 等待线程结束
+
+
 
 
 if __name__ == "__main__":
