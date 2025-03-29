@@ -168,10 +168,10 @@ model: deepseek-chat #模型名称
 
 >注：请确保在项目根目录下运行以下命令，并确保运行前进入了虚拟环境
 ```bash
-cd who_knows/who_knows_search
+cd who_knows_search
 dora up
-dora build xiaowang_start_dataflow.yml
-dora start xiaowang_start_dataflow.yml
+dora build who_knows_dataflow.yml
+dora start who_knows_dataflow.yml
 ```
 
 等待显示以下内容后，表示数据流启动成功：
@@ -202,7 +202,7 @@ Press CTRL+C to quit
 >此示例仅作演示使用，实际部署请使用Nginx或其他Web服务器托管。
 
 
-由于dora启动速度的原因若刚刚执行完 `dora start who_knows_dataflow.yml`立马执行 `xiaowang`可能会报错，如遇报错请等待几秒后再次执行`whos_serve`命令。
+由于dora启动速度的原因若刚刚执行完 `dora start who_knows_dataflow.yml`立马执行 `whos_serve`可能会报错，如遇报错请等待几秒后再次执行`whos_serve`命令。
 
 打开浏览器，输入`http://localhost:5000/`，进入到搜索引擎主页，输入查询内容，点击搜索按钮，即可看到搜索结果。
 
@@ -267,3 +267,6 @@ Press CTRL+C to quit
 - [Mofa](https://github.com/moxin-org/mofa)
 - [吴宗寰老师](https://china2024.gosim.org/zh/speakers/zonghuan-wu)
 - [陈成老师]
+- [赵志举老师]
+- [阿图教育]
+
