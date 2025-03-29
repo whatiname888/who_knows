@@ -62,8 +62,19 @@ who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项�
 ![1728992177018](https://github.com/whatiname888/who_knows/blob/main/image/81baf620ccb5b39bb81e213ce3a48cf.png?raw=true)
 
 **agent数据流框图**
-
-![](https://github.com/whatiname888/who_knows/blob/main/image/d8405ae7f4cff047388fb511b276282.png?raw=true)
+```mermaid
+flowchart TB
+  arxvi_search_LLM["**arxvi_search_LLM**"]
+  github_search_LLM["**github_search_LLM**"]
+  google_search_LLM["**google_search_LLM**"]
+  serve["**serve**"]
+  serve -- data as query --> arxvi_search_LLM
+  serve -- data as query --> github_search_LLM
+  serve -- data as query --> google_search_LLM
+  arxvi_search_LLM -- arxvi_search_LLM_result as agent_response_arxvi --> serve
+  github_search_LLM -- github_search_LLM_result as agent_response_github --> serve
+  google_search_LLM -- google_search_LLM_result as agent_response_google --> serve
+```
 
 ## Getting_started
 
