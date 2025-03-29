@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/whatiname888/who_knows">
-    <img src="https://github.com/whatiname888/who_knows/blob/main/image/who.png?raw=true" alt="Logo" width="88" height="88">
+    <img src="https://github.com/whatiname888/who_knows/blob/main/image/haha.png?raw=true" alt="Logo" width="88" height="88">
   </a>
 
 <h3 align="center">Who_Knows</h3>
