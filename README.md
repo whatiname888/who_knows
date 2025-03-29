@@ -20,7 +20,7 @@
     ·
     <a href="https://github.com/whatiname888/who_knows/issues">报告Bug</a>
     ·
-    <a href="https://github.com/whatiname888/who_knows/discussion">提出新特性</a>
+    <a href="https://github.com/whatiname888/who_knows/pulls">提出新特性</a>
   </p>
 
 </p>
