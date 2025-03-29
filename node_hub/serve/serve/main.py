@@ -19,7 +19,7 @@ from collections import defaultdict
 import uuid
 import json
 
-#import threading
+
 
 
 
@@ -35,8 +35,7 @@ import json
 node=Node("serve")
 
 app = Flask(__name__)
-#node_shou = Node("serve")
-#node_fa = Node("serve")
+
 
 
 # 线程安全的消息队列和聊天记录
@@ -110,21 +109,39 @@ class ChatAgent:
             "help": "可用命令:\n- 天气\n- 时间\n- 新闻\n- exit"
         }
     
+    def format_search_results(search_results):
+        """将search_results字典格式化为大语言模型可以接受的文本数据"""
+        formatted_results = "\n".join(f"{key}: {value}" for key, value in search_results.items())
+        return formatted_results
+    
     def generate_response(self, user_input, context=None):
         """生成响应并更新上下文"""
         #time.sleep(random.uniform(0.5, 1.5))
         
         if user_input.lower() in ['exit', 'quit']:
             return "会话结束。输入任何消息重新开始。", None
+        #获取搜索结果
+        with search_lock:
+            search_context = self.format_search_results(search_results)
+            
+        #获取历史记录
+        #根据历史记录和搜索结果构建prompt
+
+        #调用模型
         
-        # 检查是否有触发词
+        #模型返回内容后处理决定是否调用搜索模块
+
+
+         # 检查是否有触发词
         for trigger, response in self.proactive_triggers.items():
-            if trigger in user_input.lower():
-                return response, trigger
+             if trigger in user_input.lower():
+                 return response, trigger
         
         # 默认响应
         result = f"已处理: {user_input}"
         response = random.choice(self.responses).format(input=user_input, result=result)
+        return response, user_input
+
         return response, user_input
 
 chat_agent = ChatAgent()
@@ -150,7 +167,7 @@ def monitor_external_changes(session_id, stop_event):
                 with search_lock:
                     if event_id in search_results:
                        # 将结果转换为字符串存储
-                       result_str = str(node_results.get('node_results', '未查询到数据'))
+                       result_str = str(node_results.get('node_results', '正在搜索ing'))
                        search_results[event_id] = result_str
                        external_msg = f" {event_id} : {result_str[:50]}..."
                        print(f" {event_id} : {result_str[:50]}...")  # 截短显示
@@ -180,10 +197,11 @@ def chat_stream(session_id):
     def event_stream():
         while session_id in active_sessions:
             try:
-                if not message_queues[session_id].empty():
-                    message = message_queues[session_id].get()
-                    yield f"data: {message}\n\n"
-                time.sleep(0.1)
+                with search_lock:
+                    if not message_queues[session_id].empty():
+                        message = message_queues[session_id].get()
+                        yield f"data: {message}\n\n"
+                        time.sleep(0.1)
             except:
                 break
     return Response(event_stream(), mimetype="text/event-stream")
@@ -236,18 +254,20 @@ def send_message():
             'time': time.time()
         })
     
+    #给查询agent发送消息
+    #clean_message = clean_string(message)
+    #print(f"11发送消息: {clean_message}")
+    #send_queue.put(clean_message)
 
-    clean_message = clean_string(message)
-    print(f"11发送消息: {clean_message}")
 
-    send_queue.put(clean_message)
 
     # 生成响应
     def generate_response():
         history = chat_histories.get(session_id, [])
-        context = [msg['message'] for msg in history[-3:] if msg['sender'] == 'user']
-        response, new_context = chat_agent.generate_response(message, context)
-        
+        context = [msg['message'] for msg in history[-8:] if msg['sender'] == 'user']
+        # response, new_context = chat_agent.generate_response(message, context)
+        response = "正在处理..."
+        new_context = None
         # 发送响应
         message_queues[session_id].put(json.dumps({
             'message': response,

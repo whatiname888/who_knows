@@ -113,6 +113,8 @@
         const sendButton = document.getElementById('send-button');
         let sessionId = null;
         let eventSource = null;
+        let reconnectAttempts = 0;
+        const maxReconnectAttempts = 8; 
 
         // 添加消息到聊天界面
         function addMessage(sender, message) {
@@ -155,15 +157,23 @@
 
         // 设置事件流连接
         function setupEventStream() {
-            eventSource = new EventSource(`/chat_stream/${sessionId}`);
+            if (reconnectAttempts >= maxReconnectAttempts) {
+                addMessage('system', '无法连接到服务器，请刷新页面重试');
+                return;
+            } 
             
+            eventSource = new EventSource(`/chat_stream/${sessionId}`);
+            reconnectAttempts++;
+
             eventSource.onmessage = function(event) {
                 try {
                     const data = JSON.parse(event.data);
                     addMessage(data.sender, data.message);
                 } catch (e) {
                     console.error('解析消息失败:', e);
+                    addMessage('system', '接收到的数据格式有误'); // 解析失败时显示错误消息
                 }
+                reconnectAttempts = 0; // 连接成功时重置计数 
             };
             
             eventSource.onerror = function() {
