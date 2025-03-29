@@ -10,6 +10,8 @@ from dora import Node
 from mofa.utils.install_pkg.load_task_weaver_result import extract_important_content
 RUNNER_CI = True if os.getenv("CI") == "true" else False
 
+import yaml
+
 from flask import Flask, request, jsonify, render_template, Response
 from threading import Thread, Lock, Event
 import time
@@ -18,16 +20,48 @@ import queue
 from collections import defaultdict
 import uuid
 import json
+from openai import OpenAI
+
+
+# 获取当前脚本所在目录  
+script_dir = os.path.dirname(os.path.abspath(__file__))  
+config_path = os.path.join(script_dir, 'config.yaml') 
+
+# 读取YAML配置文件  
+with open(config_path, 'r',encoding='utf-8') as file:  
+    config = yaml.safe_load(file)  
+
+# 从配置中加载API密钥和基础URL  
+api_key = config['api_key']  
+base_url = config['base_url']
+model = config['model']
 
 
 
 
 
 
+messages = [
+        {"role": "system", "content": """***主要任务***
+你的名字是who_konws,是一个搜索助手，
+你的任务是根据对话记录和其他agent收集到的信息为用户整理搜索结果,
+你需要提供一个搜索结果的排序方案，并给出具体的搜索结果,
+如果有些你知道的信息但是其他agent未搜索到的也可以经过整理后提供给用户,
+不过要记得讲清楚这是你记忆的内容并非来自网络搜索，
+并告知用户网络搜索agent的状态，
+每一条搜索结果都要标注出处并给出网页链接（如有）
 
-
-
-
+***对话风格***
+请口语化的表达，
+表现出极其专业干练的态度，
+没有一句废话，
+回复用户时不要僵化死板地重复，
+要照顾到用户的感受，
+在用户等待时间长时安抚用户,
+保持专业中立理性
+使用正常文本回答不要用readme格式"""},
+        {"role": "assistant", "content": f"今天想知道点什么?\ntime:{time.strftime('%H:%M:%S', time.localtime())}"}
+        ]
 
 
 
@@ -59,9 +93,9 @@ stop_flag = False
 
 #搜索结果
 search_results = {
-    'agent_response_github': '',
-    'agent_response_arxiv': '',
-    'agent_response_google': ''
+    'agent_response_github': '正在搜索ing',
+    'agent_response_arxiv': '正在搜索ing',
+    'agent_response_google': '正在搜索ing'
 }
 
 
@@ -95,21 +129,22 @@ def dora_worker():
 
 class ChatAgent:
     def __init__(self):
-        self.responses = [
-            "分析中...\n请稍候",
-            "已收到: {input}\n正在处理...",
-            "根据我的知识:\n{result}",
-            "查询结果:\n------\n{result}",
-            "处理完成:\n------\n{result}"
-        ]
-        self.proactive_triggers = {
-            "天气": "需要我提供天气预报吗?",
-            "时间": "需要我告诉你当前时间吗?",
-            "新闻": "要我获取最新新闻吗?",
-            "help": "可用命令:\n- 天气\n- 时间\n- 新闻\n- exit"
-        }
+        pass
+        # self.responses = [
+        #     "分析中...\n请稍候",
+        #     "已收到: {input}\n正在处理...",
+        #     "根据我的知识:\n{result}",
+        #     "查询结果:\n------\n{result}",
+        #     "处理完成:\n------\n{result}"
+        # ]
+        # self.proactive_triggers = {
+        #     "天气": "需要我提供天气预报吗?",
+        #     "时间": "需要我告诉你当前时间吗?",
+        #     "新闻": "要我获取最新新闻吗?",
+        #     "help": "可用命令:\n- 天气\n- 时间\n- 新闻\n- exit"
+        # }
     
-    def format_search_results(search_results):
+    def format_search_results(self,search_results):
         """将search_results字典格式化为大语言模型可以接受的文本数据"""
         formatted_results = "\n".join(f"{key}: {value}" for key, value in search_results.items())
         return formatted_results
@@ -123,25 +158,30 @@ class ChatAgent:
         #获取搜索结果
         with search_lock:
             search_context = self.format_search_results(search_results)
-            
-        #获取历史记录
-        #根据历史记录和搜索结果构建prompt
-
-        #调用模型
         
-        #模型返回内容后处理决定是否调用搜索模块
-
-
-         # 检查是否有触发词
-        for trigger, response in self.proactive_triggers.items():
-             if trigger in user_input.lower():
-                 return response, trigger
+        #获取历史记录
+        with system_lock:
+            #加入搜索结果
+            messages_this_turn = messages
+        
+        messages_this_turn.append({
+                "role": 'system',
+                "content": search_context
+            })
+        #调用模型
+        client = OpenAI(api_key=api_key, base_url=base_url)
+        response_agent = client.chat.completions.create(
+            model=model,
+            messages=messages_this_turn,
+            stream=False
+            )
+        
+        #print()
+        response=response_agent.choices[0].message.content
         
         # 默认响应
         result = f"已处理: {user_input}"
-        response = random.choice(self.responses).format(input=user_input, result=result)
-        return response, user_input
-
+        #response = random.choice(self.responses).format(input=user_input, result=result)
         return response, user_input
 
 chat_agent = ChatAgent()
@@ -153,8 +193,8 @@ def monitor_external_changes(session_id, stop_event):
             # 模拟从外部获取消息 (实际应用中可以是API调用、数据库查询等)
             
             
-            with system_lock:
-                    history = chat_histories[session_id]
+            # with system_lock:
+            #         history = chat_histories[session_id]
             
             if not receive_queue.empty():
                 event=receive_queue.get()
@@ -183,6 +223,7 @@ def monitor_external_changes(session_id, stop_event):
                         'time': time.time()
                     })    
                 receive_queue.task_done()
+                #                           调用大模型
             
                     
         except Exception as e:
@@ -223,10 +264,11 @@ def start_session():
     
     # 发送欢迎消息
     welcome_msg = {
-        'message': "您吉祥，今天想知道点什么?",
+        'message': "今天想知道点什么?",
         'sender': 'system'
     }
     message_queues[session_id].put(json.dumps(welcome_msg))
+
     chat_histories[session_id].append({
         'sender': 'system',
         'message': welcome_msg['message'],
@@ -253,11 +295,15 @@ def send_message():
             'message': message,
             'time': time.time()
         })
+        messages.append({
+                "role": 'user',
+                "content": message
+            })
     
     #给查询agent发送消息
-    #clean_message = clean_string(message)
-    #print(f"11发送消息: {clean_message}")
-    #send_queue.put(clean_message)
+    clean_message = clean_string(message)
+    print(f"发送消息: {clean_message}")
+    send_queue.put(clean_message)
 
 
 
@@ -265,14 +311,16 @@ def send_message():
     def generate_response():
         history = chat_histories.get(session_id, [])
         context = [msg['message'] for msg in history[-8:] if msg['sender'] == 'user']
-        # response, new_context = chat_agent.generate_response(message, context)
-        response = "正在处理..."
-        new_context = None
+        response, new_context = chat_agent.generate_response(message, context)
+        #                      调用大模型
+        #response = "正在处理..."
+        #new_context = None
         # 发送响应
         message_queues[session_id].put(json.dumps({
             'message': response,
             'sender': 'ai'
         }))
+            
         
         # 更新上下文
         with system_lock:
@@ -280,6 +328,10 @@ def send_message():
                 'sender': 'ai',
                 'message': response,
                 'time': time.time()
+            })
+            messages.append({
+                "role": 'assistant',
+                "content": response
             })
             
             if new_context:

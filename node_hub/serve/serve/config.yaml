@@ -1,0 +1,3 @@
+api_key: sk-992d1b3f57ee43a5bf401c004f3eefd0  #您的API密钥
+base_url: https://api.deepseek.com  #API的基础URL
+model: deepseek-chat
