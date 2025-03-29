@@ -69,7 +69,7 @@ who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项�
 
 ### 环境依赖配置
 
-> 注：建议在Linux系统运行，Windows下会有兼容问题。
+> 注：请在Linux和MacOS系统上运行，本项目依赖框架暂不支持Windows
 
 **本项目所需框架及语言版本如下**
 
@@ -77,29 +77,52 @@ who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项�
   pip 24.2
   Rust 1.81.0
   dora-cli 0.3.6
-1. 搭建虚拟环境:
 
-   ```sh
-   python3.12 -m venv myenv 
-   ```
-   ```sh
-   source myenv/bin/activate  
-   ```
-   你可以将myenv更改为你喜欢的名字
 
-2. 克隆仓库:
+1. 克隆此项目:
 
-   ```sh
-   git clone https://gitcode.com/BJF_17812135905/xiaowang.git
-   ```
+ ```bash
+ git clone https://github.com/whatiname888/who_knows.git
+ ```
 
-3. 运行dabao.py:
+2. 使用Python 3.10或以上环境：
 
-   dabao.py为你准备了安装依赖等的自动化操作
+- 如果出现环境版本不匹配，请检查python和pip版本并重新配置,建议使用虚拟环境。
 
-   ```sh
-   python dabao.py
-   ```
+```bash
+pip --version
+python --version
+```
+
+3. 项目环境部署(安装)
+
+- 安装python环境的依赖：
+
+```bash
+# 安装 UV 包管理器 加快mofa安装
+pip install uv
+#安装python后端框架
+pip install flask
+```
+
+```bash
+# 安装 Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+# 安装 Dora
+cargo install dora-cli
+# 验证安装
+rustc --version
+cargo --version
+dora --version
+```
+
+```bash
+cd mofa/python
+# 安装依赖，以下两个命令建议都执行一遍，因为有时uv安装会失败，但是uv的安装速度更快
+uv pip install -e .
+pip install -e .
+```
+安装完毕之后，可以使用`mofa --help`命令查看Cli帮助信息
 
 恭喜你，在上述步骤后你已经成功搭建好了运行who_knows的全部基础！！
 
@@ -124,50 +147,66 @@ who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项�
  ├── .gitignore # Git 忽略文件
  ├── .gitmodules # 项目配置文件
  ├── LICENSE# 许可证
- ├── README.md # readme文件
- ├── setup.py # mofa包安装文件
- ├── README.rst # 项目配置文件
- └── requirements.txt # mofa依赖
+ └── README.md # readme文件
 ```
 
-打开文件夹`xiaowang/xiaowang_start/configs/`
+打开以下配置文件更改API密钥，模型名称，API接口URL：
 
-配置该文件夹中以下文件内大语言模型推理 API部分：
+`who_knows/node_hub/serve/serve/config.yaml`
+`who_knows/node_hub/arxiv_search_LLM/arxiv_search_LLM/config.yaml`
+`who_knows/node_hub/github_search_LLM/github_search_LLM/config.yaml`
+`who_knows/node_hub/google_search_LLM/google_search_LLM/config.yaml`
 
-- `agent_DLC.yml`   -动态规划节点
-- `agent_generate.yml`   -生成节点
-- `agent_reflaction.yml`  -反思节点
-
-大语言模型推理 Api配置示例：
-使用**Openai**API：
-
+本项目使用**Openai**API，以下为config.yaml文件示例：
 ~~~
-MODEL:
-  MODEL_API_KEY:  
-  MODEL_NAME: gpt-4o-mini
-  MODEL_MAX_TOKENS: 2048
+api_key:   #您的API密钥
+base_url: https://api.deepseek.com  #API的基础URL
+model: deepseek-chat #模型名称
 ~~~
-
-配置完成后，可使用Dora-rs命令行命令运行 `xiaowang_start_dataflow.yml` 文件
 
 - 顺序执行以下命令以启动智能体流程：
 
+>注：请确保在项目根目录下运行以下命令，并确保运行前进入了虚拟环境
 ```bash
+cd who_knows/who_knows_search
 dora up
 dora build xiaowang_start_dataflow.yml
 dora start xiaowang_start_dataflow.yml
 ```
 
-打开一个新的终端窗口，运行 `xiaowang`，
-
+等待显示以下内容后，表示数据流启动成功：
 ```bash
-xiaowang
+INFO  dataflow `xxxx-xxx-xxx` on daemon `xxxx-xxx-xxx` google_search_LLM daemon: node is ready
+INFO  dataflow `xxxx-xxx-xxx` on daemon `xxxx-xxx-xxx` github_search_LLM daemon: node is ready
+INFO  dataflow `xxxx-xxx-xxx` on daemon `xxxx-xxx-xxx` arxiv_search_LLM daemon: node is ready
+INFO  dataflow `xxxx-xxx-xxx` on daemon `xxxx-xxx-xxx` daemon: all nodes are ready, starting dataflow
 ```
 
-由于dora启动速度的原因若刚刚执行完 `dora start xiaowang_start_dataflow.yml`立马执行 `xiaowang`可能会导致程序不输出，不要慌张等待片刻即可看到程序输出`说吧，什么事:`的提示。
-当看到`说吧，什么事:`时，输入提问内容回车即可。
 
-> 注：由于网络及电脑性能等原因，输出可能有不同程度延迟，请耐心等待模型输出结果，当输出完成后程序会打印`回答结束`，随后进入下一轮对话。
+打开一个新的终端窗口，进入相同虚拟环境后运行 `whos_serve`
+
+```bash
+whos_serve
+```
+看到以下输出即为yun_serve启动成功：
+```bash
+ * Serving Flask app 'serve.main'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: xxx-xxx-xxx
+```
+>此示例仅作演示使用，实际部署请使用Nginx或其他Web服务器托管。
+
+
+由于dora启动速度的原因若刚刚执行完 `dora start who_knows_dataflow.yml`立马执行 `xiaowang`可能会报错，如遇报错请等待几秒后再次执行`whos_serve`命令。
+
+打开浏览器，输入`http://localhost:5000/`，进入到搜索引擎主页，输入查询内容，点击搜索按钮，即可看到搜索结果。
+
+> 注：由于网络及电脑性能等原因，输出可能有不同程度延迟，请耐心等待模型输出结果。
 
 ## 创新点与突破点
 
@@ -179,7 +218,7 @@ xiaowang
 - **大脑（任务代理模块）**  
   分工明确、协同工作的智能代理集合，负责处理所有后端任务，包括数据的初步抓取和深层次的关联搜索，确保输出的结果准确而全面。
 
-- 总结**  
+- **总结**  
   我们设计的实时交互中继架构，采用双模型协同工作机制：前端轻量化交互模型专责对话流维持与结果渲染，在用户发起请求的瞬间即生成交互反馈信号（<200ms）；后端智能路由模型同步执行多模态语义解析，通过动态关键词提取引擎并行检索GitHub/arXiv/Google三大知识库。两套模型通过事件驱动型信息流实现解耦，使得界面响应延迟与后端计算耗时完全隔离。该架构确保每个用户查询经历「交互保障→语义解析」两次独立模型处理阶段，在维持零停顿对话体验的同时，为后续扩展自定义爬虫接口预留了标准化接入点。
 
 
