@@ -110,24 +110,25 @@ who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项�
 由于我们的程序需要使用在线大模型API运行的，因此在启动前要将你的API密钥，模型名称，API接口URL填入配置文件。
 
 以下是我们的项目文件结构：
-
-> who_knows/
-> ├── mofa/ # mofa代码目录
-> ├── xiaowang_start/ # 主要节点代码
-> │ ├── configs/ # agent配置文件
-> │ ├── scripts/# agent代码
-> │ ├── data/# 视频，照片，实例测试结果
-> │ ├── README.md
-> │ ├── xiaowang_start_dataflow.yml
-> │ └── xiaowang_start_dataflow-graph.html
-> ├── xiaowang_terminal/ # xiaowang主程序
-> ├── .gitignore # Git 忽略文件
-> ├── HISTORY.rst # 项目配置文件
-> ├── LICENSE# 许可证
-> ├── README.md # readme文件
-> ├── setup.py # mofa包安装文件
-> ├── README.rst # 项目配置文件
-> └── requirements.txt # mofa依赖
+```
+ who_knows/
+ ├── image/ # 图片
+ ├── mofa/ # mofa框架仓库
+ ├── node_hub/ # 各节点代码
+ ├── who_knows_search/ # dataflow配置文件
+ │ ├── scripts/ # agent配置文件
+ │ ├── data/# 视频，照片，实例测试结果
+ │ ├── README.md
+ │ ├── who_knows_dataflow.yml
+ │ └── who_knows_dataflow-graph.html
+ ├── .gitignore # Git 忽略文件
+ ├── .gitmodules # 项目配置文件
+ ├── LICENSE# 许可证
+ ├── README.md # readme文件
+ ├── setup.py # mofa包安装文件
+ ├── README.rst # 项目配置文件
+ └── requirements.txt # mofa依赖
+```
 
 打开文件夹`xiaowang/xiaowang_start/configs/`
 

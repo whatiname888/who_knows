@@ -9,16 +9,6 @@ nodes:
       agent_response_arxiv: arxiv_search_LLM/arxiv_search_LLM_result
       agent_response_google: google_search_LLM/google_search_LLM_result
 
-  - id: terminal-input
-    build: pip install -e ../node_hub/terminal-input
-    path: dynamic
-    outputs:
-      - data
-    inputs:
-      agent_response_github: github_search_LLM/github_search_LLM_result
-      agent_response_arxiv: arxiv_search_LLM/arxiv_search_LLM_result
-      agent_response_google: google_search_LLM/google_search_LLM_result
-
   
 
   - id: arxiv_search_LLM
