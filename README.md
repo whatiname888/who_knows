@@ -59,11 +59,11 @@ who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项�
 ---
 **多层次动态反思智能体原理框图**
 
-![1728992177018](https://github.com/whatiname888/xiaowang/blob/main_code/xiaowang_start/data/1.png?raw=true)
+![1728992177018](https://github.com/whatiname888/who_knows/blob/main/81baf620ccb5b39bb81e213ce3a48cf.png?raw=true)
 
 **agent数据流框图**
 
-![](https://github.com/whatiname888/xiaowang/blob/main_code/xiaowang_start/data/2.png?raw=true)
+![](https://github.com/whatiname888/who_knows/blob/main/d8405ae7f4cff047388fb511b276282.png?raw=true)
 
 ## Getting_started
 
