@@ -276,7 +276,7 @@ Press CTRL+C to quit
 
 - [Mofa](https://github.com/moxin-org/mofa)
 - [吴宗寰老师](https://china2024.gosim.org/zh/speakers/zonghuan-wu)
-- [陈成老师]
-- [赵志举老师]
+- [陈成老师](https://github.com/chengzi0103)
+- [赵志举老师](https://github.com/ketty-zzj)
 - [阿图教育]
 
