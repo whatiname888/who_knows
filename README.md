@@ -1,4 +1,29 @@
+# **Who_Knows?**
 
+<!-- PROJECT LOGO -->
+
+<br />
+
+<p align="center">
+  <a href="https://gitcode.com/whatiname/who_knows">
+    <img src="https://github.com/whatiname888/who_knows/blob/main_code/xiaowang_start/data/1.1.png?raw=true" alt="Logo" width="88" height="88">
+  </a>
+
+<h3 align="center">XiaoWang</h3>
+  <p align="center">
+    基于MoFA的多层次动态反思智能体
+    <br />
+    <a href="https://gitcode.com/whatiname/xiaowang"><strong>本项目的Gitcode库链接 »</strong></a>
+    <br />本项目由[爱北京，来工大]团队制作
+    <br />
+    <a href="https://github.com/whatiname888/xiaowang">查看使用文档</a>
+    ·
+    <a href="https://gitcode.com/whatiname/xiaowang/issues">报告Bug</a>
+    ·
+    <a href="https://gitcode.com/whatiname/xiaowang/discussion">提出新特性</a>
+  </p>
+
+</p>
 # 项目简介
 who_knows 是一个基于 mofa 框架，使用 dora 组织数据流的搜索项目。它通过大模型与小模型的协同工作来提炼和过滤海量搜索结果，自动拓展关键词，帮助用户从繁琐的信息中快速找到关键信息，使搜索过程更加高效、直接。
 - **核心特点**  
