@@ -150,7 +150,6 @@ pip install -e .
  ├── mofa/ # mofa框架仓库
  ├── node_hub/ # 各节点代码
  ├── who_knows_search/ # dataflow配置文件
- │ ├── scripts/ # agent配置文件
  │ ├── data/# 视频，照片，实例测试结果
  │ ├── README.md
  │ ├── who_knows_dataflow.yml
