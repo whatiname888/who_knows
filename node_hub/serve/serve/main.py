@@ -43,12 +43,13 @@ model = config['model']
 
 messages = [
         {"role": "system", "content": """***主要任务***
-你的名字是who_konws,是一个搜索助手，
+你的名字是who_konws,是一个搜索助手,
 你的任务是根据对话记录和其他agent收集到的信息为用户整理搜索结果,
 你需要提供一个搜索结果的排序方案，并给出具体的搜索结果,
 如果有些你知道的信息但是其他agent未搜索到的也可以经过整理后提供给用户,
-不过要记得讲清楚这是你记忆的内容并非来自网络搜索，
-并告知用户网络搜索agent的状态，
+但是请记住一定要讲清楚这是你记忆的内容并非来自网络搜索结果,
+以此保证你输出结果的正确性（因为你记忆中的不一定正确，不过可以作为参考）
+并告知用户网络搜索agent的状态,
 每一条搜索结果都要标注出处并给出网页链接（如有）
 
 ***对话风格***
@@ -58,9 +59,8 @@ messages = [
 回复用户时不要僵化死板地重复，
 要照顾到用户的感受，
 在用户等待时间长时安抚用户,
-保持专业中立理性
-使用正常文本回答不要用readme格式"""},
-        {"role": "assistant", "content": f"今天想知道点什么?\ntime:{time.strftime('%H:%M:%S', time.localtime())}"}
+保持专业中立理性"""},
+        {"role": "assistant", "content": f"今天想知道点什么?"}
         ]
 
 
@@ -91,12 +91,17 @@ receive_queue = Queue()
 stop_flag = False
 
 
+
 #搜索结果
 search_results = {
-    'agent_response_github': '正在搜索ing',
-    'agent_response_arxiv': '正在搜索ing',
-    'agent_response_google': '正在搜索ing'
+    'agent_response_github': '空闲中',
+    'agent_response_arxiv': '空闲中',
+    'agent_response_google': '空闲中'
 }
+
+thinking_nodes = 0
+
+#search_results_status = {github:"get", arxiv:"get", google:"get"}
 
 
 def dora_worker():
@@ -106,7 +111,7 @@ def dora_worker():
             # 处理发送任务
             if not send_queue.empty():
                 message = send_queue.get()
-                print(f"Dora worker received message: {message}")
+                print(f"Dora worker received message(out)")
                 with dora_lock:  # 仍建议保留锁机制
                     node.send_output("data", pa.array([clean_string(message)]))
                 send_queue.task_done()
@@ -120,7 +125,7 @@ def dora_worker():
             if event['type'] == 'ERROR':
                 continue
             receive_queue.put(event)
-            print(f"Dora worker received event: {event}")
+            print(f"Dora worker received event (in)")
                 
                 
         except Exception as e:
@@ -158,12 +163,16 @@ class ChatAgent:
         #获取搜索结果
         with search_lock:
             search_context = self.format_search_results(search_results)
+        print(f"收到搜索结果:\n {search_context[:88]}\n")
         
         #获取历史记录
         with system_lock:
             #加入搜索结果
             messages_this_turn = messages
-        
+
+
+        #print(f"当前上下文: {messages_this_turn[-88:]}")
+
         messages_this_turn.append({
                 "role": 'system',
                 "content": search_context
@@ -207,23 +216,101 @@ def monitor_external_changes(session_id, stop_event):
                 with search_lock:
                     if event_id in search_results:
                        # 将结果转换为字符串存储
+                       global thinking_nodes
                        result_str = str(node_results.get('node_results', '正在搜索ing'))
                        search_results[event_id] = result_str
-                       external_msg = f" {event_id} : {result_str[:50]}..."
-                       print(f" {event_id} : {result_str[:50]}...")  # 截短显示
+                       external_msg = f" {event_id} : {result_str[:88]}..."
+                       print(f" {event_id} : {result_str[:88]}...")  # 截短显示
+                       #系统消息发送到网页
+                       message_queues[session_id].put(json.dumps({
+                           'message': external_msg,
+                           'sender': 'system'
+                           }))
+                       chat_histories[session_id].append({
+                           'sender': 'system',
+                           'message': external_msg,
+                           'time': time.time()
+                           }) 
+                       if  results == "空闲中":
+                           thinking_nodes=thinking_nodes-1
+                           receive_queue.task_done()
+                           continue
+                       if results == "出现错误，已暂停":
+                           thinking_nodes=thinking_nodes-1
+                           receive_queue.task_done()
+                           continue
+                       if results == "正在搜索ing":
+                           receive_queue.task_done()
+                           continue
+                       else:
+                           thinking_nodes=thinking_nodes-1
+                           thinking_num=thinking_nodes
+                
+                
+
 
                 #系统消息发送到网页
-                message_queues[session_id].put(json.dumps({
-                        'message': external_msg,
+                # message_queues[session_id].put(json.dumps({
+                #         'message': external_msg,
+                #         'sender': 'system'
+                #     }))
+                # chat_histories[session_id].append({
+                #         'sender': 'system',
+                #         'message': external_msg,
+                #         'time': time.time()
+                #     }) 
+                
+                # 处理结果
+                if results == "正在搜索ing"  or results == "出现错误，已暂停":
+                    receive_queue.task_done()
+                    continue
+
+
+
+                # 生成响应
+                def generate_response():
+                    #history = chat_histories.get(session_id, [])
+                    #context = [msg['message'] for msg in history[-8:] if msg['sender'] == 'user']
+                    context=""
+                    message = ""
+                    response, new_context = chat_agent.generate_response(message, context)
+                    #                      调用大模型
+                    # #response = "正在处理..."
+                    # #new_context = None
+                    # # 发送响应
+                    message_queues[session_id].put(json.dumps({
+                        'message': response,
+                        'sender': 'ai'
+                        }))
+                    
+                    # 更新上下文
+                    with system_lock:
+                        chat_histories[session_id].append({
+                            'sender': 'ai',
+                            'message': response,
+                            'time': time.time()
+                            })
+                        # messages.append({
+                        #     "role": 'assistant',
+                        #     "content": response
+                        #     })
+                
+                if thinking_num==0:
+                    # 所有节点都回复完毕，生成响应
+                    #系统消息发送到网页
+                    message_queues[session_id].put(json.dumps({
+                        'message': "搜索完毕,生成结果ing",
                         'sender': 'system'
-                    }))
-                chat_histories[session_id].append({
+                        }))
+                    chat_histories[session_id].append({
                         'sender': 'system',
-                        'message': external_msg,
+                        'message': "搜索完毕,生成结果ing",
                         'time': time.time()
-                    })    
+                        }) 
+                    Thread(target=generate_response).start()
+
+                   
                 receive_queue.task_done()
-                #                           调用大模型
             
                     
         except Exception as e:
@@ -305,7 +392,18 @@ def send_message():
     print(f"发送消息: {clean_message}")
     send_queue.put(clean_message)
 
-
+    with search_lock:
+        #已发送用户请求，待回复
+        global thinking_nodes
+        for event_id in search_results:
+            if search_results[event_id] == "空闲中"or search_results[event_id] == "出现错误，已暂停":
+                search_results[event_id] = "已向该节点发送用户请求，待该节点回复"
+                thinking_nodes=thinking_nodes+1
+            elif search_results[event_id] == "已向该节点发送用户请求，待该节点回复":
+                 pass
+            else:
+                search_results[event_id] = "已向该节点发送用户请求，待该节点回复"
+                thinking_nodes=thinking_nodes+1
 
     # 生成响应
     def generate_response():
@@ -393,7 +491,7 @@ def main():
     if data is None and os.getenv("DORA_NODE_CONFIG") is None:
         dora_thread = Thread(target=dora_worker, daemon=True)
         dora_thread.start()
-        app.run(host='0.0.0.0',debug=True, threaded=True)
+        app.run(debug=True, threaded=True)
         dora_thread.join()
 
 

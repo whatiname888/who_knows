@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 import time
 
 
-
 # 获取当前脚本所在目录  
 script_dir = os.path.dirname(os.path.abspath(__file__))  
 config_path = os.path.join(script_dir, 'config.yaml') 
@@ -30,8 +29,7 @@ messages = [
 请考虑用户需求和平台特性生成搜索关键词。
 请根据用户的输入判断用户是否需要搜索，
 如用户需要搜索则返回以","为分隔的搜索词，
-如用户不需要搜索则返回NNNN。"""},
-        {"role": "user", "content": f"今天天气咋样?"}
+如用户不需要搜索则返回NNNN。"""}
         ]
 
 def generate_keywords_or_identify_need(query):  
@@ -303,7 +301,7 @@ class GitHubCrawler:
 def filter_results_with_model(results,query):  
     try:  
         # 下面是使用 OpenAI 进行筛选的示例  
-        messages = [
+        messages_shai = [
         {"role": "system", "content": """你是一个筛选助手，
          负责根据用户的问题筛选出搜索结果中有用的部分，
          输出时请只输出你筛选出来的部分，
@@ -316,7 +314,7 @@ def filter_results_with_model(results,query):
 
         response = client.chat.completions.create(
             model=model,
-            messages=messages
+            messages=messages_shai
             ) 
 
         filtered_content = response.choices[0].message.content
@@ -330,8 +328,10 @@ def filter_results_with_model(results,query):
 def run(agent: MofaAgent):
     user_query = agent.receive_parameter('query')
     #print("laile")
+
     if user_query is None:
         return
+    
     #大模型根据问题生成关键词，如不需要搜索返回特定标识
     keywords=generate_keywords_or_identify_need(user_query)
     if not keywords:
@@ -343,6 +343,11 @@ def run(agent: MofaAgent):
         agent.send_output(agent_output_name='github_search_LLM_result', agent_result="空闲中")
         return
     
+    agent.send_output(agent_output_name='github_search_LLM_result', agent_result="正在搜索ing")
+
+    #启动搜索
+    # t=threading.Thread(target=search_thread,args=(keywords,user_query))
+    # t.start()
     #根据关键词列表查询关键词并用大模型筛选
     crawler = GitHubCrawler()
     search_results = crawler.search(
@@ -351,10 +356,17 @@ def run(agent: MofaAgent):
                 max_pages=2,
                 get_readme=True
             )
-    
-    filltered_content=filter_results_with_model(search_results,user_query)
+    #print(search_results)
+    print("找到了，让我看看")
+    #filltered_content=filter_results_with_model(search_results,user_query)
+    #print(filltered_content)
+    #if filltered_content is None or filltered_content==[]:
+    #   #result_queue.put("未搜索到结果")
+    #    agent.send_output(agent_output_name='github_search_LLM_result', agent_result="未搜索到结果")
 
-    agent.send_output(agent_output_name='github_search_LLM_result', agent_result=filltered_content)
+    #result_queue.put(filltered_content)
+    agent.send_output(agent_output_name='github_search_LLM_result', agent_result=search_results)
+    
         
 
 

@@ -4,7 +4,7 @@ def run(agent: MofaAgent):
     user_query = agent.receive_parameter('query')
     if user_query is not None:
         print(f"user_query: {user_query}")
-        agent.send_output(agent_output_name='arxiv_search_LLM_result', agent_result=user_query)
+        agent.send_output(agent_output_name='arxiv_search_LLM_result', agent_result="空闲中")
 
 def main():
     agent = MofaAgent(agent_name='arxiv_search_LLM')
