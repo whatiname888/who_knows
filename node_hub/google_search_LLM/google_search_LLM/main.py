@@ -212,7 +212,7 @@ def run(agent: MofaAgent):
 
 
 def main():
-    agent = MofaAgent(agent_name='github_search_LLM')
+    agent = MofaAgent(agent_name='google_search_LLM')
     run(agent=agent)
 
 if __name__ == "__main__":
