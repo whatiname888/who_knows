@@ -393,7 +393,7 @@ def main():
     if data is None and os.getenv("DORA_NODE_CONFIG") is None:
         dora_thread = Thread(target=dora_worker, daemon=True)
         dora_thread.start()
-        app.run(debug=True, threaded=True)
+        app.run(host='0.0.0.0',debug=True, threaded=True)
         dora_thread.join()
 
 
