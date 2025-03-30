@@ -163,18 +163,20 @@ pip install -e .
 
 在相应目录建立以下配置文件并填写你的API密钥，模型名称，API接口URL：
 
-`who_knows/node_hub/serve/serve/config.yaml`
-`who_knows/node_hub/arxiv_search_LLM/arxiv_search_LLM/config.yaml`
-`who_knows/node_hub/github_search_LLM/github_search_LLM/config.yaml`
-`who_knows/node_hub/google_search_LLM/google_search_LLM/config.yaml`
+```bash
+who_knows/node_hub/serve/serve/config.yaml
+who_knows/node_hub/arxiv_search_LLM/arxiv_search_LLM/config.yaml
+who_knows/node_hub/github_search_LLM/github_search_LLM/config.yaml
+who_knows/node_hub/google_search_LLM/google_search_LLM/config.yaml
+```
 
 本项目使用**Openai**API框架，以下为config.yaml文件内容示例：
 
-~~~
+```yaml
 api_key:   #您的API密钥
 base_url: https://api.deepseek.com  #API的基础URL
 model: deepseek-chat #模型名称
-~~~
+```
 
 - 顺序执行以下命令以启动智能体流程：
 
