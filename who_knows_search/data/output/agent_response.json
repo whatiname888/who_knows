@@ -1,14 +1,213 @@
 [
     {
-        "task": "",
-        "response": ""
+        "task": "帮我找个叫mofa的智能体框架",
+        "response": "嘿，网络搜索agent们已经把搜索结果都带回来啦，下面就按照咱之前说的相关度从高到低给你整理呈现哦。
+
+排序方案
+先根据搜索结果与“mofa智能体框架”这个主题的直接相关性进行排序，相关性越强越靠前。对于同样相关性较强的结果，再按照搜索平台（github、arxiv、google）的顺序依次排列来自不同平台的内容，以便你能更全面清晰地查看各个方面的信息呀。
+
+具体搜索结果
+来自github的搜索结果：
+名称：moxin-org/mofa
+
+描述：MoFA: Modular Framework for Agent，MoFA是一个软件框架，用于通过基于组合的方法构建AI智能体。使用MoFA，可以通过模板构建AI智能体，并分层组合以形成更强大的超级智能体。
+
+链接：https://github.com/moxin-org/mofa
+
+星星数（stars）：54
+
+名称：bioFAM/MOFA
+
+描述：MOFA: Multi-Omics Factor Analysis，MOFA是一种因子分析模型，它提供了以完全无监督的方式集成多组学数据集的通用框架。
+
+链接：https://github.com/bioFAM/MOFA
+
+星星数（stars）：239
+
+名称：bioFAM/MOFA2
+
+描述：Multi-Omics Factor Analysis，MOFA是一个因子分析模型，为以无监督方式集成多组学数据集提供了通用框架。
+
+链接：https://github.com/bioFAM/MOFA2
+
+星星数（stars）：326
+
+名称：MyNiuuu/MOFA-Video
+
+描述：MOFA-Video: Controllable Image Animation via Generative Motion Field Adaptions in Frozen Image-to-Video Diffusion Model (ECCV 2024)
+
+链接：https://github.com/MyNiuuu/MOFA-Video
+
+星星数（stars）：733
+
+名称：waxz/MoFA
+
+描述：MoFA: Model-based Deep Convolutional Face Autoencoder for Unsupervised Monocular Reconstruction
+
+链接：https://github.com/waxz/MoFA
+
+星星数（stars）：35
+
+来自arxiv的搜索结果：
+标题：MOFA: Discovering Materials for Carbon Capture with a GenAI- and Simulation-Based Workflow
+
+摘要：We presentMOFA, an open-source generative AI (GenAI) plus simulation workflow for high-throughput generation of metal-organic frameworks (MOFs) on large-scale high-performance computing (HPC) systems.…
+
+链接：https://arxiv.org/abs/2501.10651
+
+标题：MOFA-Video: Controllable Image Animation via Generative Motion Field Adaptions in Frozen Image-to-Video Diffusion Model
+
+摘要：We presentMOFA-Video, an advanced controllable image animation method that generates video from the given image using various additional controllable signals (such as human landmarks reference, manual trajectories, and another even provided video) or their combinations. This is different from previous methods which only can work on a specific motion domain…
+
+链接：https://arxiv.org/abs/2405.20222
+
+标题：On Test Sequence Generation using Multi-Objective Particle Swarm Optimization
+
+摘要：sequences with the highest priority and the lowest Oracle cost as optimal. The performance of the implemented approach is compared with the Multi-Objective Firefly Algorithm (MOFA) for generating test sequences. The MOPSO-based solution outperforms theMOFA-based approach and simultaneously provides the optimal solutio…
+
+链接：https://arxiv.org/abs/2404.06568
+
+标题：MOFA: A Model Simplification Roadmap for Image Restoration on Mobile Devices
+
+摘要：of parameters by up to 23%, while increasing PSNR and SSIM on several image restoration datasets. Source Code of our method is available at \href{https://github.com/xiangyu8/MOFA}{https://github.com/xiangyu8/MOFA}.
+
+链接：https://arxiv.org/abs/2308.12494
+
+标题：DRKF: Distilled Rotated Kernel Fusion for Efficient Rotation Invariant Descriptors in Local Feature Matching
+
+摘要：processed by the subsequent re-parameterization, no extra computational costs will be introduced in the inference stage. Moreover, we present Multi-oriented Feature Aggregation (MOFA) which aggregates features extracted from multiple rotated versions of the input image and can provide auxiliary knowledge for the training of RKF by leveraging the distillation…
+
+链接：https://arxiv.org/abs/2209.10907
+
+来自google的搜索结果：
+标题：MoFA: 迈向AIOS 原创 - CSDN博客
+
+简介：MoFA (Modular Framework for Agents)是一个独特的模块化AI智能体框架。MoFA以组合（Composition)的逻辑和编程（Programmable）的方法构建AI智能体。开发者通过模版的继承、编程、定制智能体，通过堆叠和组合，形成更强大的超级智能体（Super Agent)。
+
+链接：https://blog.csdn.net/vastgrassland/article/details/142408978
+
+标题：MOFA: 你好，世界！ 原创 - CSDN博客
+
+简介：我们的MoFA智能体编程框架也将随之发布。今天，我们掀起MoFA面纱的一角，来介绍一下如何用MoFA来写一个最简单的智能体：Hello, World!程序员们都知道...
+
+链接：https://blog.csdn.net/vastgrassland/article/details/142753620
+
+标题：2025 MoFA 超级智能体大赛- 黑客马拉松编程大赛- 训练营
+
+简介：2025 Mofa 大赛MoFA (Modular Framework for Agents)是一个独特的模块化AI智能体框架。MoFA以组合（Composition)的逻辑和编程（Programmable）的方法构建AI智能体。
+
+链接：https://opencamp.cn/gosim/camp/mofa-2025
+
+标题：Agent 智能体开发框架选型指南 - 53AI
+
+简介：开发人员在构建智能体时，不仅要决定使用何种模型、应用场景和技术架构，还要挑选合适的开发框架。是坚持较为早期的LangGraph，还是转向新兴的LlamaIndex...
+
+链接：https://www.53ai.com/news/langchain/2024110531870.html
+
+标题：2025 MoFA Search AI 搜索引擎大赛- 黑客马拉松编程... - opencamp.cn
+
+简介：MoFA搜索引擎是一款去中心化、保护隐私的组合搜索引擎，无需爬虫，实时返回深网和本地信息，尊重内容权益，由开发者集体协作实现高效搜索。 讲师：吴老师.
+
+链接：https://opencamp.cn/gosim/camp/MoFA2025/stage/0
+
+另外呢，我这儿之前还提到过一个我记忆里的内容呀，就是MOFA（Multimodal Factor Analysis），它是一种多模态因子分析框架，常用于分析多种数据模态之间的关系，不过这只是我记忆的，不一定完全准确哦，你就当个参考先。
+
+这下关于“mofa智能体框架”的相关信息就都给你整理好啦，希望能对你有所帮助呀，如果还有其他需要搜索的，尽管说哦。"
     },
     {
-        "task": "",
-        "response": ""
+        "task": "我想学习机器学习和神经网络",
+        "response": "嘿呀，先别急哈，搜索结果正在赶来的路上呢。
+
+排序方案：我打算按照内容的基础入门程度到进阶程度这样来排序，方便你循序渐进地学习哦。
+
+以下是目前我记忆里的一些相关内容供你参考哈（注意哦，这可不是网络搜索结果，就是我记着的一些大概情况，仅供参考呀）：
+
+机器学习呢，简单说就是让计算机能像人一样去学习、去从数据里发现规律啥的。比如可以通过一些算法让机器去识别图片里是猫还是狗呀。
+神经网络呢，是机器学习里很重要的一部分啦，它是模仿人类大脑神经元的连接方式构建的模型，能处理很复杂的任务，像语音识别、自然语言处理这些领域都常用到神经网络。
+等网络搜索agent那边有了确切结果，我马上就给你详细又准确的搜索内容哈。
+---
+agent_response_arxiv : 正在搜索ing...
+---
+agent_response_google : 正在搜索ing...
+---
+agent_response_github : 正在搜索ing...
+---
+agent_response_google : {
+"机器学习入门教程": {
+"searchParameters": {
+"q": "机器学习入门教程",
+...
+---
+agent_response_github : [{"name": "girls-in-ai/Girls-In-AI", "url": "https://github.com/girls-in-ai/Girls-In-AI"...
+---
+agent_response_arxiv : [
+{
+"id": "2503.21777",
+"title": "Test-Time Visual In-Context Tuning...
+---
+搜索完毕,生成结果ing
+---
+嘿，搜索结果都来啦，下面就按照咱之前说的，从基础入门程度到进阶程度这样给你排好序咯。
+
+一、基础入门相关（适合刚接触机器学习和神经网络，想要先了解基本概念、学习路线等方面的内容）
+
+来源：我的记忆内容
+具体信息：机器学习呢，简单说就是让计算机能像人一样去学习、去从数据里发现规律啥的。比如可以通过一些算法让机器去识别图片里是猫还是狗呀。神经网络呢，是机器学习里很重要的一部分啦，它是模仿人类大脑神经元的连接方式构建的模型，能处理很复杂的任务，像语音识别、自然语言处理这些领域都常用到神经网络。（注意哦，这可不是网络搜索结果，就是我记着的一些大概情况，仅供参考呀）
+来源：菜鸟教程 - http://www.runoob.com/ml/ml-tutorial.html
+具体信息：机器学习（Machine Learning）是人工智能（AI）的一个分支，它使计算机系统能够利用数据和算法自动学习和改进其性能。机器学习是让机器通过经验（数据）来做决策和预测。
+来源：《如何学习机器学习》 - https://qiankunli.github.io/2019/08/23/learn_machine_learning.html
+具体信息：学习路线与材料方面，如果以理论为中心，要扎扎实实从数学基础开始，把数据科学、机器学习大基础夯实，然后顺势向上学习Deep Learning，再往前既可以做研究，也可以做其他相关拓展。其中提到需要重点温习的包括向量、线性空间、线性方程组、矩阵、矩阵运算及其性质、向量微积分等数学知识。当提到Jacobian矩阵和Hessian矩阵的时候，得知道确切的数学形式；当给出一个相关数学场景，要能有对应的理解。另外还提到学会python就行，R也可以用用，还有英语起码能基本的听和读也是有帮助的。
+来源：谷歌开发者 - https://developers.google.com/machine-learning/crash-course?hl=zh-cn
+具体信息：这是Google提供的快节奏、实用的机器学习简介课程，包含一系列包含视频讲座、互动式可视化内容和实操练习的课程，可以帮助你快速入门机器学习的一些基础知识哦。
+二、进阶学习相关（在有了一定基础后，适合深入学习具体算法、应用实践等方面的内容）
+
+来源：《机器学习实践案例》 - https://zhuanlan.zhihu.com/p/27283616
+具体信息：介绍了一种利用深度学习实现的图片识别案例，这种功能可以应用到图片的检黄、人脸识别、物体检测等各个领域。并且提到了可以通过阿里云机器学习平台产品等来进行相关实践操作哦。
+来源：ShowMeAI - https://www.showmeai.tech/article-detail/202
+具体信息：在前面的机器学习案例中，使用了Python机器学习工具库Scikit-Learn ，它建立在NumPy、SciPy、Pandas和Matplotlib之上，也是最常用的Python机器学习库之一。文章通过具体案例讲解了相关应用实践过程呢。
+来源：《神经网络应用领域》 - https://cloud.google.com/discover/what-is-a-neural-network?hl=zh-CN
+具体信息：介绍了神经网络应用广泛，包括图像识别（图像中的物体识别可用在汽车自动驾驶、社交媒体平台和医疗诊断等应用场景）、自然语言处理(NLP)（可以实现机器翻译、文本总结和情感分析，为谷歌翻译和聊天机器人等工具提供支持）、金融建模、医疗诊断、机器人学、Self-driving vehicles、欺诈检测、垃圾数据过滤等诸多领域哦。
+来源：《怎样掌握神经网络》 - https://zhuanlan.zhihu.com/p/392363532
+具体信息：讲解了一些神经网络训练技巧，比如首先输入单个数据批次，并且保证这个batch数据对应的标签是正确的（如果需要标签的话），然后重复在这个batch数据上进行训练，直到损失函数数值达到稳定等内容，有助于深入掌握神经网络的训练环节呢。
+目前网络搜索agent的状态是：已经全部完成搜索任务并成功返回了结果哦，你可以放心参考这些内容啦，要是在学习过程中有啥新的疑问，随时说哈。"
     },
     {
-        "task": "",
-        "response": ""
+        "task": "我想了解下注意力机制",
+        "response": "好啦，关于注意力机制的搜索结果已经来啦，来看看吧。
+
+排序方案：我先给你呈现一些比较通俗易懂的基础介绍内容，让你能快速对注意力机制有个大概的认识，然后是一些涉及具体应用和技术细节的内容，最后再给出一些相关的代码资源等，方便你循序渐进地深入了解。
+
+具体搜索结果如下：
+
+基础介绍类
+标题：注意力机制- 维基百科，自由的百科全书
+链接：https://zh.wikipedia.org/zh-cn/%E6%B3%A8%E6%84%8F%E5%8A%9B%E6%9C%BA%E5%88%B6
+简介：介绍了注意力机制是人工神经网络中一种模仿认知注意力的技术，它可以增强神经网络输入数据中某些部分的权重，同时减弱其他部分的权重，以此将网络的关注点聚焦于数据中最重要的一小部分。还提到可以通过梯度下降法对注意力机制进行训练。
+标题：一文搞定注意力机制（Attention） 原创 - CSDN博客
+链接：https://blog.csdn.net/weixin_42110638/article/details/134011134
+简介：将注意力机制类比人类的神经系统处理复杂感知信息的方式，即通过选择性关注和集中注意力来处理特定刺激，帮助过滤掉不相关或无用的信息。基于注意力机制的深度学习，核心在于让机器学会去感知数据中的重要和不重要的部分。
+标题：注意力机制（attention）和自注意力机制（self-attention）的学习总结
+链接：https://blog.csdn.net/weixin_43610114/article/details/126684999
+简介：指出注意力机制源自于人对于外部信息的处理能力，由于人接受的信息庞大复杂远超人脑处理能力，所以人会有选择性地关注信息，该机制就是模拟这种能力，而自注意力机制在同一个模型中可以使用多次，作为网络结构的一部分。
+原理及应用类
+标题：注意力机制（Attention mechanism）基本原理详解及应用 - 博客园
+链接：https://www.cnblogs.com/jins-note/p/13056604.html
+简介：先以视觉注意力机制是人类视觉所特有的大脑信号处理机制为例，阐述人类视觉会先快速扫描全局图像获得需重点关注的目标区域，即注意力焦点，而后对其重点处理。接着说明注意力模型在深度学习各个领域如图像处理、语音识别、自然语言处理等各种任务中被广泛使用。
+标题：一文看懂Attention（本质原理+3大优点+5大类型）
+链接：https://easyaitech.medium.com/%E4%B8%80%E6%96%87%E7%9C%8B%E6%87%82-attention-%E6%9C%AC%E8%B4%A8%E5%8E%9F%E7%90%86-3%E5%A4%A7%E4%BC%98%E7%82%B9-5%E5%A4%A7%E7%B1%BB%E5%9E%8B-e4fbe4b6d030
+简介：通过将Attention机制类比人类看图片的逻辑，即不会看清图片全部内容而是聚焦在焦点上，来解释其本质原理。还提到该机制最早在计算机视觉里应用，随后在NLP领域发扬光大，以及它的一些优点和类型等，并介绍了其在不同领域的应用情况。
+标题：注意力机制在医学上的应用综述 - 汉斯出版社
+链接：https://www.hanspub.org/journal/paperinformation?paperid=58869
+简介：文章介绍了注意力机制并总结了其在医学上的主要应用，包括医学图像检测与分割、医学图像分类、疾病预测、行为识别等方面，说明了在医学领域引入注意力机制的意义和作用。
+代码及资源类
+标题：datalogue/keras-attention - GitHub
+链接：https://github.com/datalogue/keras-attention
+简介：提供了在Keras中带有注意力机制的自定义RNN层的实现和可视化，用于翻译日期等任务，还给出了设置仓库、创建数据集、运行模型等的具体操作步骤和相关参数说明。
+标题：uzaymacar/attention-mechanisms - GitHub
+链接：https://github.com/uzaymacar/attention-mechanisms
+简介：包含了一系列注意力机制的自定义层实现，兼容TensorFlow和Keras集成，可用于多种自然语言处理任务如情感分类、文本生成、机器翻译等，还介绍了不同类型的注意力机制及相关的对齐函数等内容。
+标题：xmu-xiaoma666/External-Attention-pytorch - GitHub
+链接：https://github.com/xmu-xiaoma666/External-Attention-pytorch
+简介：致力于实现一个既能让深度学习小白也能搞懂，又能服务科研和工业社区的代码库，包含了多种注意力机制相关的模块，如External Attention、Self Attention等的使用示例，可通过pip安装或克隆仓库的方式使用。"
     }
 ]
