@@ -161,14 +161,15 @@ pip install -e .
  └── README.md # readme文件
 ```
 
-打开以下配置文件更改API密钥，模型名称，API接口URL：
+在相应目录建立以下配置文件并填写你的API密钥，模型名称，API接口URL：
 
 `who_knows/node_hub/serve/serve/config.yaml`
 `who_knows/node_hub/arxiv_search_LLM/arxiv_search_LLM/config.yaml`
 `who_knows/node_hub/github_search_LLM/github_search_LLM/config.yaml`
 `who_knows/node_hub/google_search_LLM/google_search_LLM/config.yaml`
 
-本项目使用**Openai**API，以下为config.yaml文件示例：
+本项目使用**Openai**API框架，以下为config.yaml文件内容示例：
+
 ~~~
 api_key:   #您的API密钥
 base_url: https://api.deepseek.com  #API的基础URL
@@ -246,7 +247,7 @@ Press CTRL+C to quit
 ## 技术难点与解决方案
 
 ### 技术难点
-Dora框架不支持并发，无法充分利用多核CPU性能，导致处理能力受限，高并发场景下容易出现性能瓶颈，并且长时间运行的任务会阻塞整个系统。
+Dora框架对并发的支持不佳，无法充分利用多核CPU性能，导致处理能力受限，高并发场景下容易出现性能瓶颈，并且长时间运行的任务会阻塞整个系统。
 ### 解决方案
 我们通过Flask的多线程和消息队列机制实现了类似并发的效果。具体来说，它使用线程安全的队列(message_queues)来管理不同会话的消息，并通过独立的监控线程(monitor_external_changes)处理外部事件，同时利用全局锁(system_lock, search_lock)来保证数据一致性，从而在Dora框架的单线程限制下实现了多会话并发处理。
 
