@@ -3,3 +3,7 @@ out/
 who_knows_search/out/
 who_knows_search/logs/
 **/config.yaml
+node_hub/github_search_LLM/github_search_LLM/config.yaml
+node_hub/google_search_LLM/google_search_LLM/config.yaml
+node_hub/arxiv_search_LLM/arxiv_search_LLM/config.yaml
+node_hub/serve/serve/config.yaml
