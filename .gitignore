@@ -2,3 +2,4 @@ who_knows_env/
 out/
 who_knows_search/out/
 who_knows_search/logs/
+**/config.yaml
